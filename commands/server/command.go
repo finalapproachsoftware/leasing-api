@@ -1,20 +1,20 @@
 package server
 
 import (
-	"github.com/sirupsen/logrus"
-	"github.com/finalapproachsoftware/leasing-api/logging"
 	"strings"
+
+	"github.com/finalapproachsoftware/leasing-api/logging"
+	"github.com/sirupsen/logrus"
 )
 
 type Command struct {
-
 }
 
-func(c *Command) Synopsis() string{
+func (c *Command) Synopsis() string {
 	return "Runs the leasing api server"
-} 
+}
 
-func(c *Command) Help() string{
+func (c *Command) Help() string {
 	helpText := `
 	Usage: leasing server [options]
 	`
@@ -22,15 +22,19 @@ func(c *Command) Help() string{
 	return strings.TrimSpace(helpText)
 }
 
-
-func(c *Command) Run(args []string) int {
+func (c *Command) Run(args []string) int {
 	logging.Log().WithFields(logrus.Fields{
 		"event": "start",
 		"topic": "something else",
-		"key": "a key",
-	  }).Info("Server Starting...")
+		"key":   "a key",
+	}).Info("Server Starting...")
+
+	server, err := newServer()
+	if err != nil {
+		logging.Log().Error("Could not configure server")
+	}
+
+	server.start()
 
 	return 0
 }
-
-
